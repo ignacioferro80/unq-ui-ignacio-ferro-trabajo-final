@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import Game from "./Game.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+export const App = () => {
+  const [gridSize, setGridSize] = useState(null);
+  const [highestScore, setHighestScore] = useState(0);
+
+  const handleSelectGrid = (size) => {
+    setGridSize(size);
+  };
+
+  const handleResetGame = () => {
+    setGridSize(null);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Nacho</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Memo Test</h1>
+      {!gridSize ? (
+        <div>
+          <h2>Selecciona un tamaño:</h2>
+          <button onClick={() => handleSelectGrid(4)}>4x4</button>
+          <button onClick={() => handleSelectGrid(5)}>5x5</button>
+          <button onClick={() => handleSelectGrid(6)}>6x6</button>
+        </div>
+      ) : (
+        <Game
+          gridSize={gridSize}
+          onResetGame={handleResetGame}
+          highestScore={highestScore}
+          updateHighestScore={setHighestScore}
+        />
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
