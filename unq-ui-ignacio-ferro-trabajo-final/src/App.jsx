@@ -1,37 +1,66 @@
 import React, { useState } from "react";
-import Game from "./Game.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import League from "./pages/League";
+import Game from "./pages/Game";
+import HardGame from "./pages/HardGame";
+import Warning from "./pages/Warning";
 
-export const App = () => {
+const App = () => {
   const [gridSize, setGridSize] = useState(null);
-  const [highestScore, setHighestScore] = useState(0);
-
+  const [highestScoreSize4, setHighestScoreSize4] = useState(0);
+  const [highestScoreSize6, setHighestScoreSize6] = useState(0);
+  
   const handleSelectGrid = (size) => {
     setGridSize(size);
   };
 
-  const handleResetGame = () => {
-    setGridSize(null);
-  };
+  const updateHighestScore = (newScore) => {
+    if(gridSize === 4) {
+      setHighestScoreSize4(newScore);
+    }
+    else{
+      setHighestScoreSize6(newScore);
+    }
+  }
+
+  const highestScore = () => {
+    return gridSize === 4 ? highestScoreSize4 : highestScoreSize6;
+  }
 
   return (
-    <div>
-      <h1>Memo Test</h1>
-      {!gridSize ? (
-        <div>
-          <h2>Selecciona un tamaño:</h2>
-          <button onClick={() => handleSelectGrid(4)}>4x4</button>
-          <button onClick={() => handleSelectGrid(5)}>5x5</button>
-          <button onClick={() => handleSelectGrid(6)}>6x6</button>
-        </div>
-      ) : (
-        <Game
-          gridSize={gridSize}
-          onResetGame={handleResetGame}
-          highestScore={highestScore}
-          updateHighestScore={setHighestScore}
+    <Router>
+      <Routes>
+
+        <Route path="/" element={<Home handleSelectGrid={handleSelectGrid}/>} />
+
+        <Route path="/league" element={<League />} />
+
+        <Route
+          path="/game"
+          element={
+            <Game
+              gridSize={gridSize}
+              highestScore={highestScore()}
+              updateHighestScore={updateHighestScore}
+            />
+          }
         />
-      )}
-    </div>
+
+        <Route
+          path="/hardGame"
+          element={
+            <HardGame
+              highestScore={highestScore()}
+              updateHighestScore={updateHighestScore}
+            />
+          }
+        />
+
+        <Route path="/warning" element={<Warning />} />
+
+      </Routes>
+    </Router>
   );
 };
 

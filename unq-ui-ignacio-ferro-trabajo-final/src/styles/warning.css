@@ -1,0 +1,19 @@
+.warning-text{
+    max-width: 800px;
+}
+
+.button-si {
+    background-color: #0c2e02;
+}
+
+.button-si:hover {
+    background-color: #164e04;
+}
+
+.button-volver {
+    background-color: #36020e;
+}
+
+.button-volver:hover {
+    background-color: #4e0416;
+}

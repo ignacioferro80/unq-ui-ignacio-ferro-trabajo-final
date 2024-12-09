@@ -1,5 +1,13 @@
-@import "./app.css";
+@import "./home.css";
 @import "./game.css";
+@import "./warning.css";
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -8,7 +16,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #091601;
+  background-color: #010914;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -42,11 +50,13 @@ button {
   border-radius: 8px;
   border: 1px solid transparent;
   margin: 10px;
+  min-width: 100px;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #0d093d;
+  background-image: url();
   cursor: pointer;
   transition: border-color 0.25s;
   transition: transform 0.9s ease, box-shadow 0.3s ease;
@@ -55,5 +65,5 @@ button {
 button:hover {
   transform: scale(1.02);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
-  background-color: #555;
+  background-color: #131864;
 }
