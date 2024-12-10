@@ -2,22 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLpfIconByName } from "../utils/getLpfIconByName";
 import { getPrimeraNacionalIconByName } from "../utils/getPrimeraNacionalIconByName";
+import FinishedGame from "../components/FinishedGame";
+import Card from "../components/Card";
 import "../styles/game.css";
 
 const Game = ({ gridSize, highestScore, updateHighestScore }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { league } = location.state || {};
+  const { league, gameMode } = location.state || {};
   const [cards, setCards] = useState([]);
   const [selectedCards, setSelectedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
   const [score, setScore] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setCards(shuffleCards(gridSize));
     setSelectedCards([]);
     setMatchedCards([]);
     setScore(0);
+    setShowModal(false);
   }, [gridSize]);
 
   const teamIcons = (league) => {
@@ -104,8 +108,11 @@ const Game = ({ gridSize, highestScore, updateHighestScore }) => {
     return deck.sort(() => Math.random() - 0.5);
   };
 
-
   const handleCardClick = (index) => {
+    if (matchedCards.includes(index) || selectedCards.includes(index)) {
+      return;
+    }
+
     if (selectedCards.length < 2 && !selectedCards.includes(index)) {
       setSelectedCards([...selectedCards, index]);
     }
@@ -126,43 +133,59 @@ const Game = ({ gridSize, highestScore, updateHighestScore }) => {
     navigate("/");
   };
 
+  const handleRestartGame = () => {
+    setCards(shuffleCards(gridSize));
+    setSelectedCards([]);
+    setMatchedCards([]);
+    setScore(0);
+    setShowModal(false);
+  };
+
   useEffect(() => {
     if (matchedCards.length === cards.length && score > highestScore) {
       updateHighestScore(score);
+      setShowModal(true);
     }
   }, [matchedCards, cards, score, highestScore, updateHighestScore]);
 
   return (
-      <div className="game">
-        <h1>Memo Test</h1>
-        <div className="scoreboard">
-          <p><strong>Puntaje actual:</strong> {score}</p>
-          <p><strong>Puntaje más alto:</strong> {highestScore}</p>
-        </div>
-        <div className="grid" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className={`card ${matchedCards.includes(index) ? "matched" : ""} ${
-                selectedCards.includes(index) ? "flipped" : ""
-              }`}
-              onClick={() => handleCardClick(index)}
-              >
-              <div className="card-inner">
-                <div className="card-front">
-                  <img src={card} alt="team icon" />
-                </div>
-                <div className="card-back">
-                  <img src={leagueIcon(league)} alt="league icon" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="controls">
-          <button onClick={() => handleResetGame()}>Volver al inicio</button>
-        </div>
+    <div className={`game ${showModal ? "blurred" : ""}`}>
+      <h1>Memo Test</h1>
+      <div className="scoreboard">
+        <p><strong>Puntaje actual:</strong> {score}</p>
+        <p><strong>Puntaje más alto:</strong> {highestScore}</p>
       </div>
+
+      {gameMode === "multiplayer" && (
+        <MultiplayerGame gridSize={gridSize} cards={cards} league={selectedLeague} onResetGame={handleResetGame} />
+      )}
+
+      <div className="grid" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+
+        {cards.map((card, index) => (
+          <Card 
+            card={card}
+            index={index}
+            cardLogo={leagueIcon(league)}
+            matchedCards={matchedCards}
+            selectedCards={selectedCards}
+            handleCardClick={handleCardClick}
+          />
+        ))}
+
+        {showModal && (
+          <FinishedGame
+            score={score}
+            highestScore={highestScore}
+            onRestart={handleRestartGame}
+          />
+        )}
+
+      </div>
+      <div className="controls">
+        <button onClick={() => handleResetGame()}>Volver al inicio</button>
+      </div>
+    </div>
   );
 };
 

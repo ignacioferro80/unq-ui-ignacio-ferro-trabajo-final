@@ -1,3 +1,23 @@
+.text{
+  max-width: 400px;
+  text-align: center;
+  padding: 10px 80px;
+  border: 10px solid rgba(0, 0, 0, 0.1);
+  border-color: #0c0246;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.12);
+  background-color: #080130;
+}
+
+.title {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #4b85ac;
+}
+
 .button-hard {
-  background-color: #3d0000;
+  background-color: #300101;
+}
+
+.button-hard:hover {
+  background-color: #410e0e;
 }

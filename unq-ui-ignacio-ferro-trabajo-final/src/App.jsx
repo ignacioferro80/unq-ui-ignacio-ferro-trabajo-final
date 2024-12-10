@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import League from "./pages/League";
+import Config from "./pages/Config";
 import Game from "./pages/Game";
 import HardGame from "./pages/HardGame";
 import Warning from "./pages/Warning";
 
 const App = () => {
+
   const [gridSize, setGridSize] = useState(null);
   const [highestScoreSize4, setHighestScoreSize4] = useState(0);
   const [highestScoreSize6, setHighestScoreSize6] = useState(0);
@@ -34,7 +35,7 @@ const App = () => {
 
         <Route path="/" element={<Home handleSelectGrid={handleSelectGrid}/>} />
 
-        <Route path="/league" element={<League />} />
+        <Route path="/config" element={<Config />} />
 
         <Route
           path="/game"

@@ -1,0 +1,38 @@
+.config-button {
+    background-color: #bd6b01; 
+}
+  
+.config-button:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+  background-color: #b06e00;
+}
+
+.config-button.active {
+  transform: scale(0.95);
+  background-color: #20288a; 
+}
+
+.config-button.selected {
+  background-color: #38803a;
+  color: #fff;
+}
+
+.decision {
+    padding: 40px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    background-color: #500707;
+}
+
+.start-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    background-color: #165311;
+}

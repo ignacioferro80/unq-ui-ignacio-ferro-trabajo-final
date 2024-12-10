@@ -9,7 +9,7 @@ const Warning = () => {
         <div>
             <h2 className="warning-text">
                 El siguiente Memo Test de fútbol contiene 32 pares de cartas, 
-                combinando tanto equipos de la Liga Profesional de Futbol,
+                combinando tanto equipos de la Liga Profesional de Fútbol,
                 como de la Primera Nacional.
             </h2>
             <h3>

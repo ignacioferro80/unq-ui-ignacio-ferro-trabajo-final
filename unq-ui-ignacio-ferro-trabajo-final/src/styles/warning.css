@@ -1,5 +1,11 @@
 .warning-text{
     max-width: 800px;
+    padding: 10px 20px;
+    border: 10px solid rgba(0, 0, 0, 0.1);
+    border-color: #0c0246;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.12);
+    background-color: #080130;
 }
 
 .button-si {
