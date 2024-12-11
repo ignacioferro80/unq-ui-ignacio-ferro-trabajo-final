@@ -11,22 +11,18 @@ const App = () => {
   const [gridSize, setGridSize] = useState(null);
   const [highestScoreSize4, setHighestScoreSize4] = useState(0);
   const [highestScoreSize6, setHighestScoreSize6] = useState(0);
+  const [highestScoreSize8, setHighestScoreSize8] = useState(0);
   
   const handleSelectGrid = (size) => {
     setGridSize(size);
   };
 
   const updateHighestScore = (newScore) => {
-    if(gridSize === 4) {
-      setHighestScoreSize4(newScore);
-    }
-    else{
-      setHighestScoreSize6(newScore);
-    }
+    return gridSize === 4 ? setHighestScoreSize4(newScore) : gridSize === 6 ? setHighestScoreSize6(newScore) : setHighestScoreSize8(newScore);
   }
 
   const highestScore = () => {
-    return gridSize === 4 ? highestScoreSize4 : highestScoreSize6;
+    return gridSize === 4 ? highestScoreSize4 : gridSize === 6 ? highestScoreSize6 : highestScoreSize8;
   }
 
   return (

@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/config.css";
+import NotAvailable from "../components/NotAvailable";
 
 const Config = () => {
   const navigate = useNavigate();
   const [league, setLeague] = useState(null);
   const [gameMode, setGameMode] = useState(null);
+  const [notAvailable, setNotAvailable] = useState(false);
 
   const handleResetGame = () => {
     navigate("/");
   };
 
   const startGame = () => {
+    if(league === null || gameMode === null) {
+      setNotAvailable(true);
+      return
+    }
     navigate("/game", {
       state: { league, gameMode }
     });
@@ -31,6 +37,8 @@ const Config = () => {
         <button className="start-button" onClick={() => startGame()}>Jugar</button>
         <button className="back-button" onClick={() => handleResetGame()}>Volver</button>
       </div>
+
+      {notAvailable && <NotAvailable text={"Seleccioná ambas opciones para comenzar"} setNotAvailable={setNotAvailable} />}
     </div>
   );
 };

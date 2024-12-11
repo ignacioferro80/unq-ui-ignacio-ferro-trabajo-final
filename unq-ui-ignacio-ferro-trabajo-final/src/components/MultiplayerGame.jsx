@@ -1,100 +1,132 @@
 import React, { useState, useEffect } from "react";
+import Card from "../components/Card";
 import "../styles/game.css";
 
-const MultiplayerGame = ({ gridSize, cards, league, onResetGame }) => {
-  const [player1MatchedCards, setPlayer1MatchedCards] = useState([]);
-  const [player1SelectedCards, setPlayer1SelectedCards] = useState([]);
-  const [player2MatchedCards, setPlayer2MatchedCards] = useState([]);
+const MultiplayerGame = ({ gridSize, cardsPlayer1, cardsPlayer2, league, cardIcon, onRestart }) => {
+  const [player1, setPlayer1] = useState({ matchedCards: [], selectedCards: [] });
+  const [player2, setPlayer2] = useState({ matchedCards: [], selectedCards: [] });
   const [currentPlayer, setCurrentPlayer] = useState(1);
 
   useEffect(() => {
-    setPlayer1MatchedCards([]);
-    setPlayer1SelectedCards([]);
-    setPlayer2MatchedCards([]);
-    setPlayer2SelectedCards([]);
+    setPlayer1({ matchedCards: [], selectedCards: [] });
+    setPlayer2({ matchedCards: [], selectedCards: [] });
     setCurrentPlayer(1);
   }, [gridSize, league]);
 
-  const handleCardClick = (index) => {
-    if (currentPlayer === 1) {
 
-      if (player1MatchedCards.includes(index) || player1SelectedCards.includes(index)) {
-        return;
-      }
-  
-      if (player1SelectedCards.length < 2 && !player1SelectedCards.includes(index)) {
-        setPlayer1SelectedCards([...player1SelectedCards, index]);
-      }
-  
-      if (player1SelectedCards.length === 1) {
-        const [firstIndex] = player1SelectedCards;
-        if (cards[firstIndex] === cards[index]) {
-          setPlayer1MatchedCards([...setPlayer1MatchedCards, firstIndex, index]);
-        setTimeout(() => setPlayer1SelectedCards([]), 1000);
-      }
-      
+  const handleCardClick = (index) => {
+    
+    const current = currentPlayer === 1 ? player1 : player2;
+    const cards = currentPlayer === 1 ? cardsPlayer1 : cardsPlayer2;
+    const setCurrent = currentPlayer === 1 ? setPlayer1 : setPlayer2;
+
+    if (current.matchedCards.includes(index) || current.selectedCards.includes(index)) {
+      return;
     }
-    } else {
-      if (player2MatchedCards.includes(index) || player2SelectedCards.includes(index)) {
-        return;
-      }
-  
-      if (player2SelectedCards.length < 2 && !player2SelectedCards.includes(index)) {
-        setPlayer2SelectedCards([...player2SelectedCards, index]);
-      }
-  
-      if (player2SelectedCards.length === 1) {
-        const [firstIndex] = player2SelectedCards;
-        if (cards[firstIndex] === cards[index]) {
-          setPlayer2MatchedCards([...setPlayer2MatchedCards, firstIndex, index]);
-        setTimeout(() => setPlayer2SelectedCards([]), 1000);
-        }
-      }
+
+    if (current.selectedCards.length < 2) {
+      setCurrent({
+        ...current,
+        selectedCards: [...current.selectedCards, index],
+      });
     }
-    setCurrentPlayer((prev) => (prev === 1 ? 2 : 1));
+
+    if (current.selectedCards.length === 1) {
+      const [firstIndex] = current.selectedCards;
+      if (cards[firstIndex] === cards[index]) {
+        setCurrent({
+          ...current,
+          matchedCards: [...current.matchedCards, firstIndex, index],
+          selectedCards: [],
+        });
+      } else {
+        setTimeout(() => {
+          setCurrent({ ...current, selectedCards: [] });
+        }, 1000);
+      }
+      setCurrentPlayer((prev) => (prev === 1 ? 2 : 1));
+    }
   };
 
-  const isPlayer1Winner = player1MatchedCards.length > player2MatchedCards.length;
-  const isPlayer2Winner = player2MatchedCards.length > player1MatchedCards.length;
+  const handleRestartGame = () => {
+    setPlayer1({ matchedCards: [], selectedCards: [] });
+    setPlayer2({ matchedCards: [], selectedCards: [] });
+    setCurrentPlayer(1);
+    onRestart();
+  }
+
+  const isGameOver =
+    player1.matchedCards.length === cardsPlayer1.length || player2.matchedCards.length === cardsPlayer2.length;
+
+  const winnerText =
+    player1.matchedCards.length > player2.matchedCards.length
+      ? "¡El Jugador 1 tiene memoria de primera!"
+      : player1.matchedCards.length < player2.matchedCards.length
+      ? "¡El Jugador 2 tiene memoria de primera!"
+      : "Hubo un empate. ¡Sigan compitiendo para ver quien es el mejor!";
 
   return (
     <div className="multiplayer-game">
       <h1>Memo Test - 1v1</h1>
+
+      <div className="scoreboard">
+        <p>Turno del jugador: {currentPlayer}</p>
+      </div>
+
       <div className="grid-container">
         <div className="player-grid">
           <h2>Jugador 1</h2>
-          <div className="grid">
-            {cards.map((card, index) => (
+          
+          <div
+            className="grid"
+            style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
+          >
+            {cardsPlayer1.map((card, index) => (
               <Card 
                 card={card}
                 index={index}
-                cardLogo={leagueIcon(league)}
-                matchedCards={player1MatchedCards}
-                selectedCards={player1SelectedCards}
-                handleCardClick={handleCardClick}
+                cardLogo={cardIcon}
+                matchedCards={player1.matchedCards}
+                selectedCards={player1.selectedCards}
+                handleCardClick={() => {
+                  if (currentPlayer === 1) handleCardClick(index);
+                }}
               />
             ))}
           </div>
         </div>
+
         <div className="divider" />
+
         <div className="player-grid">
           <h2>Jugador 2</h2>
-          <div className="grid">{cards.map((card, index) => (
+          <div
+            className="grid"
+            style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
+          >
+            {cardsPlayer2.map((card, index) => (
               <Card 
                 card={card}
                 index={index}
-                cardLogo={leagueIcon(league)}
-                matchedCards={player2MatchedCards}
-                selectedCards={player2SelectedCards}
-                handleCardClick={handleCardClick}
+                cardLogo={cardIcon}
+                matchedCards={player2.matchedCards}
+                selectedCards={player2.selectedCards}
+                handleCardClick={() => {
+                  if (currentPlayer === 2) handleCardClick(index);
+                }}
               />
             ))}
           </div>
         </div>
       </div>
-      {isPlayer1Winner && <p>¡Jugador 1 gana!</p>}
-      {isPlayer2Winner && <p>¡Jugador 2 gana!</p>}
-      <button onClick={onResetGame}>Volver al inicio</button>
+      
+      {isGameOver && (
+        <div className="game-over">
+          <h2>{winnerText}</h2>
+          <button onClick={() => handleRestartGame()}>Reiniciar juego</button>
+        </div>
+      )}
+
     </div>
   );
 };

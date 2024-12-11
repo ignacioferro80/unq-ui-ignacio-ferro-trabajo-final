@@ -2,26 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLpfIconByName } from "../utils/getLpfIconByName";
 import { getPrimeraNacionalIconByName } from "../utils/getPrimeraNacionalIconByName";
-import FinishedGame from "../components/FinishedGame";
-import Card from "../components/Card";
+import MultiplayerGame from "../components/MultiplayerGame";
+import SimpleGame from "../components/SimpleGame";
 import "../styles/game.css";
 
 const Game = ({ gridSize, highestScore, updateHighestScore }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { league, gameMode } = location.state || {};
-  const [cards, setCards] = useState([]);
-  const [selectedCards, setSelectedCards] = useState([]);
-  const [matchedCards, setMatchedCards] = useState([]);
-  const [score, setScore] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const [cardsPlayer1, setCardsPlayer1] = useState([]);
+  const [cardsPlayer2, setCardsPlayer2] = useState([]);
 
   useEffect(() => {
-    setCards(shuffleCards(gridSize));
-    setSelectedCards([]);
-    setMatchedCards([]);
-    setScore(0);
-    setShowModal(false);
+    setCardsPlayer1(shuffleCards(gridSize));
+    setCardsPlayer2(shuffleCards(gridSize));
   }, [gridSize]);
 
   const teamIcons = (league) => {
@@ -108,83 +102,45 @@ const Game = ({ gridSize, highestScore, updateHighestScore }) => {
     return deck.sort(() => Math.random() - 0.5);
   };
 
-  const handleCardClick = (index) => {
-    if (matchedCards.includes(index) || selectedCards.includes(index)) {
-      return;
-    }
-
-    if (selectedCards.length < 2 && !selectedCards.includes(index)) {
-      setSelectedCards([...selectedCards, index]);
-    }
-
-    if (selectedCards.length === 1) {
-      const [firstIndex] = selectedCards;
-      if (cards[firstIndex] === cards[index]) {
-        setMatchedCards([...matchedCards, firstIndex, index]);
-        setScore((prevScore) => prevScore + 10);
-      } else {
-        setScore((prevScore) => Math.max(0, prevScore - 5));
-      }
-      setTimeout(() => setSelectedCards([]), 1000);
-    }
-  };
-
-  const handleResetGame = () => {
+  const handleGoBack = () => {
     navigate("/");
   };
 
   const handleRestartGame = () => {
-    setCards(shuffleCards(gridSize));
-    setSelectedCards([]);
-    setMatchedCards([]);
-    setScore(0);
-    setShowModal(false);
+    setCardsPlayer1(shuffleCards(gridSize));
+    setCardsPlayer2(shuffleCards(gridSize));
   };
 
-  useEffect(() => {
-    if (matchedCards.length === cards.length && score > highestScore) {
-      updateHighestScore(score);
-      setShowModal(true);
-    }
-  }, [matchedCards, cards, score, highestScore, updateHighestScore]);
-
   return (
-    <div className={`game ${showModal ? "blurred" : ""}`}>
-      <h1>Memo Test</h1>
-      <div className="scoreboard">
-        <p><strong>Puntaje actual:</strong> {score}</p>
-        <p><strong>Puntaje más alto:</strong> {highestScore}</p>
-      </div>
 
-      {gameMode === "multiplayer" && (
-        <MultiplayerGame gridSize={gridSize} cards={cards} league={selectedLeague} onResetGame={handleResetGame} />
-      )}
+    <div>
 
-      <div className="grid" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+      {gameMode === "multiplayer" ? (
 
-        {cards.map((card, index) => (
-          <Card 
-            card={card}
-            index={index}
-            cardLogo={leagueIcon(league)}
-            matchedCards={matchedCards}
-            selectedCards={selectedCards}
-            handleCardClick={handleCardClick}
-          />
-        ))}
+        <MultiplayerGame 
+          gridSize={gridSize} 
+          cardsPlayer1={cardsPlayer1} 
+          cardsPlayer2 ={cardsPlayer2} 
+          league={league} 
+          cardIcon={leagueIcon(league)} 
+          restartGame={handleRestartGame} />
+      
+      ) : (
 
-        {showModal && (
-          <FinishedGame
-            score={score}
-            highestScore={highestScore}
-            onRestart={handleRestartGame}
-          />
+        <SimpleGame 
+          gridSize={gridSize} 
+          cards={cardsPlayer1} 
+          league={league} 
+          cardIcon={leagueIcon(league)} 
+          restartGame={handleRestartGame} 
+          highestScore={highestScore} 
+          updateHighestScore={updateHighestScore}/>
         )}
 
-      </div>
       <div className="controls">
-        <button onClick={() => handleResetGame()}>Volver al inicio</button>
+        <button onClick={() => handleGoBack()}>Volver al inicio</button>
       </div>
+
     </div>
   );
 };

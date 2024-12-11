@@ -4,6 +4,7 @@
 @import "./finishedGame.css";
 @import "./card.css";
 @import "./config.css";
+@import "./notAvailable.css";
 
 #root {
   max-width: 1280px;
