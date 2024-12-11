@@ -123,7 +123,7 @@ const HardGame = ({ highestScore, updateHighestScore }) => {
   };
 
   const handleRestartGame = () => {
-    setCards(shuffleCards(gridSize));
+    setCards(shuffleCards(8));
     setSelectedCards([]);
     setMatchedCards([]);
     setScore(0);
@@ -131,10 +131,12 @@ const HardGame = ({ highestScore, updateHighestScore }) => {
   };
 
   useEffect(() => {
-    if (matchedCards.length === cards.length && score > highestScore) {
-      updateHighestScore(score);
+    if (matchedCards.length === cards.length && score > 0) {
       setShowModal(true);
-    }
+      if (score > highestScore) {
+          updateHighestScore(score);
+      }
+  }
   }, [matchedCards, cards, score, highestScore, updateHighestScore]);
 
 
@@ -161,7 +163,7 @@ const HardGame = ({ highestScore, updateHighestScore }) => {
               <FinishedGame
                 score={score}
                 highestScore={highestScore}
-                onRestart={handleRestartGame}
+                restartGame={handleRestartGame}
               />
             )}
 

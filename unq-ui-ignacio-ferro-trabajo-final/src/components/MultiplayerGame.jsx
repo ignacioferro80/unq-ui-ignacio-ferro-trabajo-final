@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Card from "../components/Card";
 import "../styles/game.css";
+import NotAvailable from "../components/NotAvailable";
 
 const MultiplayerGame = ({ gridSize, cardsPlayer1, cardsPlayer2, league, cardIcon, onRestart }) => {
   const [player1, setPlayer1] = useState({ matchedCards: [], selectedCards: [] });
   const [player2, setPlayer2] = useState({ matchedCards: [], selectedCards: [] });
   const [currentPlayer, setCurrentPlayer] = useState(1);
+  const [notAvailable, setNotAvailable] = useState(false);
 
   useEffect(() => {
     setPlayer1({ matchedCards: [], selectedCards: [] });
@@ -66,8 +68,8 @@ const MultiplayerGame = ({ gridSize, cardsPlayer1, cardsPlayer2, league, cardIco
       : "Hubo un empate. ¡Sigan compitiendo para ver quien es el mejor!";
 
   return (
-    <div className="multiplayer-game">
-      <h1>Memo Test - 1v1</h1>
+    <div className="multiplayer-screen">
+      <h1 className="game-title">Memo Test - 1v1 - {league}</h1>
 
       <div className="scoreboard">
         <p>Turno del jugador: {currentPlayer}</p>
@@ -89,8 +91,9 @@ const MultiplayerGame = ({ gridSize, cardsPlayer1, cardsPlayer2, league, cardIco
                 matchedCards={player1.matchedCards}
                 selectedCards={player1.selectedCards}
                 handleCardClick={() => {
-                  if (currentPlayer === 1) handleCardClick(index);
-                }}
+                  if (currentPlayer === 1) 
+                    handleCardClick(index);
+                  }}
               />
             ))}
           </div>
@@ -112,7 +115,9 @@ const MultiplayerGame = ({ gridSize, cardsPlayer1, cardsPlayer2, league, cardIco
                 matchedCards={player2.matchedCards}
                 selectedCards={player2.selectedCards}
                 handleCardClick={() => {
-                  if (currentPlayer === 2) handleCardClick(index);
+                  if (currentPlayer === 2) {
+                    handleCardClick(index);
+                  }
                 }}
               />
             ))}

@@ -40,10 +40,10 @@ const SimpleGame = ({ gridSize, league, cards, cardIcon, restartGame, highestSco
 
     useEffect(() => {
         if (matchedCards.length === cards.length && score > 0) {
-        setShowModal(true);
-        if (score > highestScore) {
-            updateHighestScore(score);
-        }
+            setShowModal(true);
+            if (score > highestScore) {
+                updateHighestScore(score);
+            }
         }
     }, [matchedCards, cards, score, highestScore, updateHighestScore]);
 
@@ -57,7 +57,7 @@ const SimpleGame = ({ gridSize, league, cards, cardIcon, restartGame, highestSco
 
     return (
         <div className={`game ${showModal ? "blurred" : ""}`}>
-          <h1>Memo Test</h1>
+          <h1 className="game-title">Memo Test - {league}</h1>
 
           <div>
             <div className="scoreboard">
