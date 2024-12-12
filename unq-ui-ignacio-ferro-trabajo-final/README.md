@@ -1,8 +1,11 @@
-# React + Vite
+# Ignacio Ferro - Interfaces de Usuario - Trabajo Final Integrador - 2024s2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descarga e instalación del proyecto: 
 
-Currently, two official plugins are available:
+Requisitos mínimos: NodeJs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Comience descargando y extrayendo en su carpeta de preferencia el archivo .zip con el código completo del repositorio.
+Una vez extraído, agregue a su workspace de Visual Studio Code (o su herramienta de codeo personal) el proyecto React dentro de nuestro repositorio de Git Hub, de nombre **_unq-ui-ignacio-ferro-trabajo-final_** (nombre igual al repositorio).
+Al haber importado el proyecto de React a nuestro Visual Studio, podemos acceder a este mismo desde la terminal de la aplicación. Es importante no confundir el nombre del repositorio con el nombre de nuestro proyecto, por más de que se llamen iguales.  
+Una vez estemos ubicados dentro del proyecto React, también ubicado dentro del repositorio que instalamos en un principio, vamos a ejecutar el comando **_npm install_** para instalar todas las dependencias necesarias para correr nuestra aplicación.
+Por último, ejecutamos el comando **_npm run dev_**, el cual inicia nuestra aplicación en la dirección local de nuestro dispositivo: _http://localhost:5173/_ para que podamos visualizar la página y comenzar a jugar al Memo Test de fútbol argentino!
